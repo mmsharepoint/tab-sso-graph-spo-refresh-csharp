@@ -13,7 +13,7 @@ For further details see the author's [blog post](https://mmsharepoint.wordpress.
 
 ## Applies to
 
-This sample was created [using the Teams Toolkit with Visual Studio 2022](https://learn.microsoft.com/en-us/microsoftteams/platform/toolkit/toolkit-v4/teams-toolkit-fundamentals-vs?WT.mc_id=M365-MVP-5004617). The same sample is also realized with the [Teams Toolkit for Visual Studio 2022](https://learn.microsoft.com/en-us/microsoftteams/platform/toolkit/teams-toolkit-fundamentals?pivots=visual-studio&WT.mc_id=M365-MVP-5004617) and can be found [here](https://github.com/mmsharepoint/tab-sso-graph-spo-refresh-node)
+This sample was created [using the Teams Toolkit with Visual Studio 2022](https://learn.microsoft.com/en-us/microsoftteams/platform/toolkit/toolkit-v4/teams-toolkit-fundamentals-vs?WT.mc_id=M365-MVP-5004617). The same sample is also realized with the [Teams Toolkit for Visual Studio Code](https://learn.microsoft.com/en-us/microsoftteams/platform/toolkit/teams-toolkit-fundamentals?pivots=visual-studio&WT.mc_id=M365-MVP-5004617) and can be found [here](https://github.com/mmsharepoint/tab-sso-graph-spo-refresh-node)
 
 ## Frameworks
 
