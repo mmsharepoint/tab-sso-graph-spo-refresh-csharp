@@ -8,17 +8,17 @@
 @inject IConfiguration Configuration
 @rendermode InteractiveServer
 
-<div className="block">
-    <div className="field">
-        <FluentTextField @bind-Value=siteUrl ReadOnly="true">Site Url</FluentTextField>
+<div class="block">
+    <div class="field">
+        <FluentTextField @bind-Value=siteUrl ReadOnly="true" style="width: 100%;">Site Url</FluentTextField>
     </div>
-    <div className="field">
-        <FluentTextField @bind-Value=groupId ReadOnly="true">Group / Team ID</FluentTextField>
+    <div class="field">
+        <FluentTextField @bind-Value=groupId ReadOnly="true" style="width: 100%;">Group / Team ID</FluentTextField>
     </div>      
-    <div className="field">
-        <FluentTextField @bind-Value=userLogin>User Login</FluentTextField>
+    <div class="field">
+        <FluentTextField @bind-Value=userLogin style="width: 100%;">User Login</FluentTextField>
     </div>      
-    <div className="button">
+    <div class="button">
         <FluentButton Appearance="Appearance.Accent" OnClick="ensureSiteUser">Ensure user</FluentButton>
     </div>
 </div>
@@ -76,6 +76,6 @@
 
         TokenController tokenController = new TokenController();
 
-        var t = tokenController.getSiteUser(config.TeamsFx.Authentication.ClientId, config.TeamsFx.Authentication.ClientSecret, tenantId, ssoToken.Token, siteUrl, userLogin);
+        var t = tokenController.getSiteUser(config, ssoToken.Token, siteUrl, userLogin);
     }
 }

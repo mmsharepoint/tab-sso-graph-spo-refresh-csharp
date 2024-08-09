@@ -1,21 +1,14 @@
 ﻿using Azure.Identity;
-using Microsoft.Graph.Models;
-using Microsoft.SharePoint.Authentication;
 using Microsoft.SharePoint.Client;
 
 namespace TabSSOGraphSpoRefresh.Contollers
 {
     public class TokenController
     {
-        private readonly IConfiguration _configuration;
-        public TokenController() 
+        public async Task<string> getSiteUser(ConfigOptions config, string userAssertion, string siteUrl, string userLogin)
         {
-            //_configuration = configuration;
-        }
-
-        public async Task<string> getSiteUser(string clientId, string clientSecret, string tenantId, string userAssertion, string siteUrl, string userLogin)
-        {
-            string token = await getSPOToken(clientId, clientSecret, tenantId, userAssertion);
+            var tenantId = config.TeamsFx.Authentication.OAuthAuthority.Remove(0, "https://login.microsoftonline.com/".Length);
+            string token = await getSPOToken(config.TeamsFx.Authentication.ClientId, config.TeamsFx.Authentication.ClientSecret, tenantId, userAssertion);
             ClientContext context = new ClientContext(siteUrl);
 
             context.ExecutingWebRequest += (sender, args) =>
@@ -23,22 +16,16 @@ namespace TabSSOGraphSpoRefresh.Contollers
                 args.WebRequestExecutor.RequestHeaders["Authorization"] = "Bearer " + token;
             };
 
-            var web = context.Web;
+            var web = context.Web;            
             context.Load(web);
+            var user = web.EnsureUser(userLogin);
+            context.Load(user);
             context.ExecuteQuery();
-            return web.Title;
+            return user.Title;
         }
         private async Task<string> getOBOToken(string clientId, string clientSecret, string tenantId, string userAssertion)
         {
             var scopes = new[] { "https://graph.microsoft.com/.default", "offline_access" }; 
-
-            // Multi-tenant apps can use "common",
-            // single-tenant apps must use the tenant ID from the Azure portal
-            //var tenantId = _configuration.GetValue<string>("TeamsFx.Authentication.TenantId");
-
-            // Values from app registration
-            //var clientId = _configuration.GetValue<string>("TeamsFx.Authentication.ClientId");
-            //var clientSecret = _configuration.GetValue<string>("TeamsFx.Authentication.ClientSecret");
 
             // using Azure.Identity;
             var options = new OnBehalfOfCredentialOptions
@@ -52,8 +39,8 @@ namespace TabSSOGraphSpoRefresh.Contollers
             var onBehalfOfCredential = new OnBehalfOfCredential(
                 tenantId, clientId, clientSecret, oboToken, options);
 
-            var onBehalfO = await onBehalfOfCredential.GetTokenAsync(new Azure.Core.TokenRequestContext(scopes), new CancellationToken());
-            return onBehalfO.Token;
+            var onBehalfOfGraph = await onBehalfOfCredential.GetTokenAsync(new Azure.Core.TokenRequestContext(scopes), new CancellationToken());
+            return onBehalfOfGraph.Token;
         }
 
         private async Task<string> getSPOToken(string clientId, string clientSecret, string tenantId, string userAssertion)
@@ -72,8 +59,8 @@ namespace TabSSOGraphSpoRefresh.Contollers
             var onBehalfOfCredential = new OnBehalfOfCredential(
                 tenantId, clientId, clientSecret, oboToken, options);
 
-            var onBehalfO = await onBehalfOfCredential.GetTokenAsync(new Azure.Core.TokenRequestContext(scopes), new CancellationToken());
-            return onBehalfO.Token;
+            var onBehalfOfSPO = await onBehalfOfCredential.GetTokenAsync(new Azure.Core.TokenRequestContext(scopes), new CancellationToken());
+            return onBehalfOfSPO.Token;
         }
     }
 }
